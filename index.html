@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ⅶ-1-3 태양의 활동</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F6F9FF;
+  --ink:#27324A;
+  --muted:#66728C;
+  --line:#DCE4F2;
+  --gas:#4B5BD6;        /* 기체: 주황 */
+  --gas-soft:#E7EAFF;
+  --sky:#5AB4E8;        /* 기체 입자: 하늘 */
+  --sky-soft:#E2F2FC;
+  --mint:#3FBFA6;
+  --mint-soft:#DDF5EF;
+  --sun:#FFD84D;
+  --sun-soft:#FFF6D2;
+  --answer:#16A34A;
+  --card:#FFFFFF;
+  --r:18px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:80px}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Noto Sans KR',system-ui,sans-serif;font-size:19px;line-height:1.75;word-break:keep-all}
+img{max-width:100%;display:block}
+h1,h2,h3,.jua{font-family:'Jua','Noto Sans KR',sans-serif;font-weight:400;letter-spacing:-.01em}
+
+/* ===== 상단 내비 ===== */
+nav{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);padding-top:env(safe-area-inset-top,0px)}
+nav .in{max-width:1180px;margin:0 auto;display:flex;align-items:center;gap:6px;padding:10px 18px;overflow-x:auto}
+nav .brand{font-family:'Jua';font-size:20px;color:var(--gas);white-space:nowrap;margin-right:10px}
+nav a{white-space:nowrap;text-decoration:none;color:var(--ink);font-size:16px;padding:6px 14px;border-radius:999px;font-weight:500}
+nav a:hover,nav a.on{background:var(--gas-soft);color:#2E3A9E}
+
+/* ===== 히어로 ===== */
+.hero{position:relative;overflow:hidden;background:radial-gradient(1.5px 1.5px at 12% 20%,#fff 60%,transparent),radial-gradient(1.5px 1.5px at 30% 70%,#fff 60%,transparent),radial-gradient(2px 2px at 55% 30%,#FFE58A 60%,transparent),radial-gradient(1.5px 1.5px at 75% 80%,#fff 60%,transparent),radial-gradient(1.5px 1.5px at 88% 15%,#fff 60%,transparent),radial-gradient(1px 1px at 45% 85%,#fff 60%,transparent),linear-gradient(160deg,#141A40 0%,#232B6B 55%,#34409A 100%);padding:64px 20px 70px}
+.hero .in{max-width:1180px;margin:0 auto;position:relative;z-index:2;display:grid;grid-template-columns:1.2fr .8fr;gap:30px;align-items:center}
+.hero .unit{display:inline-block;background:#fff;color:#2E3A9E;font-family:'Jua';font-size:20px;padding:4px 16px;border-radius:999px}
+.hero h1{font-size:clamp(40px,6vw,68px);line-height:1.15;margin:14px 0 10px;color:#fff}
+.hero p{margin:0;font-size:20px;color:#DDE2FF}
+.hero .pages{margin-top:18px;display:flex;gap:10px;flex-wrap:wrap}
+.hero .pages span{background:rgba(255,255,255,.75);border-radius:12px;padding:6px 14px;font-size:17px}
+#heroBox{width:100%;aspect-ratio:1/1;max-width:340px;justify-self:center;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff 0%,#FFF7EF 60%,#FFE6D2 100%);box-shadow:inset 0 0 0 6px #fff, 0 12px 30px rgba(200,90,18,.18)}
+
+/* ===== 레이아웃 ===== */
+main{max-width:1180px;margin:0 auto;padding:10px 20px 80px}
+section{padding:46px 0 10px}
+.sec-head{display:flex;align-items:center;gap:14px;margin-bottom:20px}
+.sec-head .num{width:52px;height:52px;border-radius:16px;display:grid;place-items:center;font-family:'Jua';font-size:28px;color:#fff;background:var(--gas);flex:none}
+.sec-head h2{font-size:34px;margin:0;line-height:1.2}
+.sec-head small{display:block;font-family:'Noto Sans KR';font-size:15px;color:var(--muted);font-weight:500}
+
+.card{background:var(--card);border-radius:var(--r);padding:26px 28px;margin:18px 0;border:2px solid var(--line)}
+.card h3{font-size:25px;margin:0 0 12px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.tag{font-family:'Jua';font-size:16px;padding:3px 12px;border-radius:999px;background:var(--sky-soft);color:#1F6FA0}
+.tag.gas{background:var(--gas-soft);color:#2E3A9E}
+.tag.mint{background:var(--mint-soft);color:#1E8571}
+.tag.sun{background:var(--sun-soft);color:#9A7400}
+.card.concept{border-color:#C3C9F5;background:linear-gradient(#fff,#fff) padding-box}
+.card.concept h3::before{content:"";width:10px;height:26px;border-radius:4px;background:var(--gas)}
+.card.think{background:#FBFDFF;border-color:#BFE0F5}
+.card.lab{border-color:#A9E3D6}
+.card.check{background:#FFFCEF;border-color:#F3DF8C}
+
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:center}
+.grid2.wide-left{grid-template-columns:1.3fr .7fr}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.fig{background:#fff;border-radius:14px;padding:8px}
+.fig figcaption{font-size:15px;color:var(--muted);text-align:center;margin-top:4px}
+.photo{border-radius:14px;overflow:hidden}
+.bubble{background:var(--sky-soft);border-radius:18px;padding:14px 20px;font-weight:700;font-size:21px;position:relative}
+.big-q{font-family:'Jua';font-size:28px;line-height:1.45;color:#1F4E79;margin:4px 0 14px}
+.def{font-size:22px;font-weight:700;background:var(--gas-soft);border-radius:14px;padding:14px 20px;margin:12px 0}
+ol.steps{padding-left:0;list-style:none;counter-reset:s;margin:0}
+ol.steps li{counter-increment:s;position:relative;padding:6px 0 6px 46px}
+ol.steps li::before{content:counter(s);position:absolute;left:0;top:7px;width:32px;height:32px;border-radius:50%;background:var(--mint);color:#fff;font-family:'Jua';font-size:19px;display:grid;place-items:center;line-height:1}
+.qlist{margin:0;padding:0;list-style:none}
+.qlist>li{padding:14px 0;border-top:1px dashed var(--line)}
+.qlist>li:first-child{border-top:none}
+.qn{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--ink);color:#fff;font-family:'Jua';font-size:17px;margin-right:8px;line-height:1}
+.note{font-size:16px;color:var(--muted)}
+.side{background:#F3F6FC;border-radius:14px;padding:12px 16px;font-size:16px;line-height:1.6}
+.side b{color:#2E3A9E}
+
+/* ===== 빈칸 / 정답 ===== */
+.bl{display:inline-block;min-width:4.2em;padding:0 .35em;margin:0 .15em;border-radius:8px;text-align:center;cursor:pointer;
+    color:transparent;background:var(--sun-soft);border-bottom:3px solid #E9C43A;line-height:1.45;transition:color .25s,background .25s}
+.bl.on{color:var(--answer);font-weight:900;background:#E9F8EE;border-bottom-color:var(--answer)}
+.ans{position:relative;margin-top:10px;border-radius:12px;padding:12px 16px;cursor:pointer;min-height:54px;background:#F4F6FA;border:2px dashed #C9D3E4}
+.ans>*{visibility:hidden}
+.ans::before{content:"?";position:absolute;inset:0;display:grid;place-items:center;font-family:'Jua';font-size:26px;color:#9AA7BF}
+.ans.on{background:#EDFAF1;border:2px solid #BFE8CC;color:var(--answer);font-weight:700}
+.ans.on>*{visibility:visible}
+.ans.on::before{content:none}
+.ans p{margin:0}
+.rv-bar{display:flex;gap:10px;justify-content:flex-end;margin-top:16px;flex-wrap:wrap}
+.btn{font-family:'Jua';font-size:20px;border:none;border-radius:14px;padding:10px 22px;cursor:pointer;background:var(--answer);color:#fff;box-shadow:0 3px 0 #0E7A35;transition:transform .08s}
+.btn:active{transform:translateY(2px);box-shadow:0 1px 0 #0E7A35}
+.btn .cnt{font-family:'Noto Sans KR';font-size:15px;opacity:.85;margin-left:6px}
+.btn.ghost{background:#fff;color:var(--muted);box-shadow:0 0 0 2px var(--line) inset}
+.btn.gas{background:var(--gas);box-shadow:0 3px 0 #2E3A9E}
+.btn.sky{background:var(--sky);box-shadow:0 3px 0 #2E86BA}
+button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid #2563EB;outline-offset:3px}
+
+/* ===== 표 ===== */
+table.tb{width:100%;border-collapse:separate;border-spacing:0;font-size:18px;overflow:hidden;border-radius:14px;border:2px solid var(--line)}
+.tb th,.tb td{padding:10px 12px;text-align:center;border-top:1px solid var(--line)}
+.tb thead th{background:#EEF3FB;border-top:none;font-family:'Jua';font-weight:400;font-size:20px}
+.tb th.down{background:var(--sky-soft);color:#1F6FA0}
+.tb th.up{background:var(--gas-soft);color:#2E3A9E}
+.scroll-x{overflow-x:auto}
+
+/* ===== 시뮬레이션 ===== */
+.sim{background:#fff;border-radius:var(--r);border:2px solid #BFE0F5;padding:20px}
+.sim canvas{width:100%;height:300px;display:block;border-radius:14px;background:#FAFCFF}
+.sim-ctrl{display:grid;grid-template-columns:1fr auto;gap:16px;align-items:center;margin-top:14px}
+.sim-ctrl input[type=range]{width:100%;accent-color:var(--gas);height:28px}
+.meters{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px}
+.meter{border-radius:14px;padding:10px 14px;background:#F4F7FC;text-align:center}
+.meter .k{font-size:15px;color:var(--muted)}
+.meter .v{font-family:'Jua';font-size:34px;line-height:1.2}
+.meter.p .v{color:#2E3A9E}
+.meter.c .v{color:#1F6FA0}
+.bar{height:12px;border-radius:999px;background:#E8EDF6;overflow:hidden;margin-top:6px}
+.bar i{display:block;height:100%;background:var(--gas);border-radius:999px;transition:width .3s}
+
+/* ===== O/X ===== */
+.ox{display:flex;align-items:center;gap:14px;padding:12px 0;border-top:1px dashed var(--line)}
+.ox:first-of-type{border-top:none}
+.ox .s{flex:1}
+.ox .bl{min-width:2.4em;font-family:'Jua';font-size:26px}
+
+.reveal{opacity:0;transform:translateY(16px);transition:opacity .5s,transform .5s}
+.reveal.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}html{scroll-behavior:auto}}
+
+footer{text-align:center;color:var(--muted);font-size:15px;padding:30px 0 calc(30px + env(safe-area-inset-bottom,0px))}
+
+@media (max-width:860px){
+  body{font-size:17px}
+  .hero .in,.grid2,.grid2.wide-left{grid-template-columns:1fr}
+  #heroBox{max-width:240px}
+  .grid3{grid-template-columns:1fr 1fr}
+  .meters{grid-template-columns:1fr}
+  .sim-ctrl{grid-template-columns:1fr}
+  .sim canvas{height:240px}
+  .sec-head h2{font-size:28px}
+  .card{padding:20px 18px}
+}
+.hero .unit{color:#2E3A9E}
+nav a.home-link,nav a.home-link:hover{background:var(--ink);color:#fff;font-weight:700;margin-right:6px}
+.linkbtns{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.btn.link{background:#27324A;box-shadow:0 3px 0 #111827;text-decoration:none;display:inline-block}
+.btn.sun{background:#F2B705;color:#2B2200;box-shadow:0 3px 0 #B98A00;text-decoration:none;display:inline-block}
+.warn{background:#FEF2F2;border:2px solid #FCA5A5;border-radius:14px;padding:12px 16px;font-weight:700;color:#B91C1C}
+/* 태양 탐험 */
+.explore{display:grid;grid-template-columns:1.05fr .95fr;gap:18px;align-items:stretch}
+.sunbox{background:#0B0F2A;border-radius:18px;padding:8px;position:relative}
+.sunbox svg{width:100%;display:block}
+.hot{cursor:pointer}
+.hot:hover .lab, .hot.on .lab{fill:#FFD84D}
+.lab{font-family:'Jua';font-size:22px;fill:#fff;paint-order:stroke;stroke:#0B0F2A;stroke-width:5px}
+.panel{background:#fff;border:2px solid var(--line);border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:10px}
+.panel img{border-radius:12px;max-height:240px;object-fit:cover;width:100%}
+.panel .where{display:inline-block;font-size:15px;border-radius:999px;padding:2px 12px;font-weight:700}
+.panel .where.s{background:#FFF1D6;color:#9A5B00}.panel .where.a{background:#E7EAFF;color:#2E3A9E}
+.panel h4{font-family:'Jua';font-weight:400;font-size:30px;margin:0}
+.chipsel{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.chipsel button{font-family:'Jua';font-size:18px;border-radius:999px;border:2px solid var(--line);background:#fff;padding:5px 14px;cursor:pointer}
+.chipsel button.on{border-color:var(--gas);background:var(--gas-soft);color:#2E3A9E}
+/* 태양 활동 시뮬 */
+.sim canvas{height:330px;background:#0B0F2A}
+.effects{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-top:12px}
+.fx{border-radius:14px;padding:8px;text-align:center;background:#F4F6FC;border:2px solid var(--line);opacity:.35;filter:grayscale(1);transition:all .4s;font-size:15px;line-height:1.4}
+.fx img{height:64px;width:auto;max-width:100%;object-fit:contain;margin:0 auto 4px}
+.fx.on{opacity:1;filter:none;border-color:#F59E0B;background:#FFFBEB}
+.lvl{font-family:'Jua';font-size:26px}
+.sortbox{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:860px){.explore,.sortbox{grid-template-columns:1fr}.effects{grid-template-columns:repeat(3,1fr)}}
+</style>
+</head>
+<body>
+
+<nav><div class="in">
+  <a class="home-link" href="https://2026-1y-sub.vercel.app/">← 목록으로</a>
+  <span class="brand">Ⅶ-1 태양의 활동</span>
+  <a href="#intro">들어가기</a>
+  <a href="#observe">태양 관측</a>
+  <a href="#surface">표면과 대기</a>
+  <a href="#active">태양 활동</a>
+  <a href="#earth">지구에 미치는 영향</a>
+  <a href="#wrap">확인·정리</a>
+</div></nav>
+
+<header class="hero">
+  <div class="in">
+    <div>
+      <span class="unit">Ⅶ. 태양계 · 1. 태양계 구성 천체와 태양의 활동</span>
+      <h1>태양의<br>활동</h1>
+      <p>태양의 표면과 대기에서는 어떤 일이 일어나고, 지구에는 어떤 영향을 줄까?</p>
+      <div class="pages"><span>교과서 236~239쪽</span><span>③ 태양의 활동</span><span>흑점 · 홍염 · 플레어 · 태양풍</span></div>
+    </div>
+    <img src="images/prominence.webp" alt="홍염" style="width:100%;max-width:440px;justify-self:center;border-radius:24px">
+  </div>
+</header>
+
+<main>
+
+<!-- ================= 들어가기 ================= -->
+<section id="intro">
+  <div class="sec-head"><div class="num">1</div><h2>들어가기<small>교과서 236쪽</small></h2></div>
+
+  <div class="card check reveal" data-reveal>
+    <h3><span class="tag sun">이전 단원 확인하기</span>옳으면 O, 옳지 않으면 X</h3>
+    <div class="ox"><span class="s">목성형 행성은 고리가 없고, 지구형 행성에 비해 위성 수가 적다.</span><span class="bl">X</span></div>
+    <p class="note" style="margin:6px 0 0">목성형 행성은 고리가 <span class="bl">있고</span>, 지구형 행성에 비해 위성 수가 <span class="bl">많다</span>.</p>
+    <div class="rv-bar"><button class="btn rv-btn">정답 확인</button></div>
+  </div>
+
+  <div class="card reveal">
+    <h3><span class="tag mint">이 단원을 배우면</span></h3>
+    <div class="side" style="font-size:19px">· 태양의 표면과 대기에서 일어나는 현상을 설명할 수 있다.<br>· 태양의 활동이 지구에 미치는 영향을 설명할 수 있다.</div>
+  </div>
+
+  <div class="card think reveal" data-reveal>
+    <h3><span class="tag">생각 깨우기</span>태양에 검은 점이 있다고?</h3>
+    <div class="grid2">
+      <img src="images/goryeo_record.webp" alt="고려 시대 기록을 보는 학생들">
+      <div>
+        <div class="bubble" style="font-size:19px;font-weight:500">고려 시대 기록에 “태양에 검은 점이 있다.”라고 적혀 있네.</div>
+        <p class="big-q" style="margin-top:14px">태양의 표면에 있는 검은 점은 무엇일까?</p>
+      </div>
+    </div>
+    <div class="ans"><p>태양의 표면에 있는 검은 점은 광구에서 관찰할 수 있는 흑점이다.</p></div>
+    <div class="rv-bar"><button class="btn rv-btn">정답 확인</button></div>
+  </div>
+</section>
+
+<!-- ================= 태양 관측 ================= -->
+<section id="observe">
+  <div class="sec-head"><div class="num">2</div><h2>천체 망원경을 이용하여 태양 관측하기<small>교과서 236쪽 · 해 보기</small></h2></div>
+
+  <div class="card lab reveal" data-reveal>
+    <h3><span class="tag mint">해 보기</span>태양 투영판으로 태양 관측하기</h3>
+    <div class="warn">⚠ 천체 망원경이나 맨눈으로 태양을 절대 직접 보지 않는다. 눈을 크게 다칠 수 있다.</div>
+    <div class="grid2" style="margin-top:12px;align-items:start">
+      <div>
+        <p><b>준비물</b> | 천체 망원경, 태양 광선 차단판, 태양 투영판, 종이</p>
+        <ol class="steps">
+          <li>맑은 날 태양이 잘 보이는 곳에 천체 망원경을 설치한다.</li>
+          <li>접안렌즈 쪽에 태양 광선 차단판과 종이를 고정한 태양 투영판을 설치한다.</li>
+          <li>경통의 방향을 조정하여 태양의 모습이 태양 투영판 가운데에 위치하게 한다.</li>
+          <li>태양의 모습이 태양 투영판에 선명하게 맺히도록 초점을 조절한다.</li>
+          <li>태양 투영판에 맺힌 태양의 모습을 그려 보고, 관측한 내용을 정리해 보자.</li>
+        </ol>
+        <div class="side"><b>안전</b> · 파인더의 뚜껑은 닫아 놓는다. · 어느 정도 관측한 후에는 경통 뚜껑을 닫고 식힌다.</div>
+      </div>
+      <img src="images/telescope_sun.webp" alt="태양 투영판을 단 천체 망원경" style="max-height:420px;justify-self:center">
+    </div>
+    <p style="margin:14px 0 0">- 관측한 태양의 모습을 설명해 보자.</p>
+    <div class="grid2" style="align-items:center">
+      <div class="ans"><p>태양 투영판 위에 태양 표면이 밝게 보이고, 태양 표면의 검은 점들이 여러 개 보인다.</p></div>
+      <img src="images/sunspots.webp" alt="흑점이 보이는 태양" style="max-height:220px;justify-self:center">
+    </div>
+    <div class="linkbtns"><a class="btn sun" href="https://spaceweather.kasa.go.kr" target="_blank" rel="noopener">우주환경센터 실시간 태양 보기</a></div>
+    <p class="note" style="margin:6px 0 0">우주환경센터 누리집 → 분석·관측 → 실시간 관측 정보에서 오늘 태양의 모습을 확인할 수 있다.</p>
+    <div class="rv-bar"><button class="btn rv-btn">정답 확인</button></div>
+  </div>
+</section>
+
+<!-- ================= 표면과 대기 ================= -->
+<section id="surface">
+  <div class="sec-head"><div class="num">3</div><h2>태양의 표면과 대기<small>교과서 237쪽 · 그림 Ⅶ-3, Ⅶ-4</small></h2></div>
+
+  <div class="card reveal" style="border-color:#C3C9F5">
+    <h3><span class="tag gas">태양 탐험</span>이름을 눌러 살펴보자</h3>
+    <div class="chipsel" id="chipsel"></div>
+    <div class="explore">
+      <div class="sunbox"><svg id="sunsvg" viewBox="0 0 520 480" role="img" aria-label="태양의 표면과 대기 모식도"></svg></div>
+      <div class="panel" id="panel"></div>
+    </div>
+  </div>
+
+  <div class="card concept reveal" data-reveal>
+    <h3>태양의 표면</h3>
+    <div class="def">우리 눈에 보이는 태양의 둥근 표면을 <span class="bl">광구</span>라고 한다.</div>
+    <div class="grid2" style="align-items:start">
+      <div class="side" style="background:#fff;border:2px solid var(--line)">
+        <img src="images/granulation.webp" alt="쌀알 무늬" style="border-radius:10px;margin-bottom:8px">
+        <b>쌀알 무늬</b><br>광구에 쌀알을 뿌려 놓은 것처럼 보이는 무늬로, 광구 아래에서 일어나는 <span class="bl">대류</span> 현상 때문에 생성된다.
+      </div>
+      <div class="side" style="background:#fff;border:2px solid var(--line)">
+        <img src="images/sunspots.webp" alt="흑점" style="border-radius:10px;margin-bottom:8px;max-height:180px;margin-inline:auto">
+        <b>흑점</b><br>광구에 나타나는 어두운 무늬로, 주변보다 온도가 <span class="bl">낮아</span> 어둡게 보인다. 흑점의 수명, 크기, 모양은 다양하며 흑점의 수는 약 <span class="bl">11년</span>을 주기로 변한다.
+      </div>
+    </div>
+    <p class="note" style="margin:10px 0 0">흑점은 실제로 검은 것이 아니라 주변보다 온도가 낮아서 상대적으로 어둡게 보이는 것이다.</p>
+    <div class="rv-bar"><button class="btn rv-btn">정답 확인</button></div>
+  </div>
+
+  <div class="card concept reveal" data-reveal>
+    <h3>태양의 대기</h3>
+    <p>태양의 대기는 광구 위에 넓게 퍼져 있다. 광구 바로 위 붉은색의 얇은 대기층을 <span class="bl">채층</span>이라 하고, 채층 위로 멀리 뻗어 있는 백색의 대기층을 <span class="bl">코로나</span>라고 한다.</p>
+    <p>태양의 대기는 광구에 비해 어둡기 때문에 평소에는 볼 수 없고, <span class="bl">달</span>이 태양의 광구를 완전히 가릴 때 관찰할 수 있다.</p>
+    <div class="grid2" style="margin:8px 0">
+      <figure class="fig" style="margin:0;background:#0B0F2A"><img src="images/chromosphere.webp" alt="채층" style="max-height:220px;margin:auto"><figcaption style="color:#DDE2FF">채층 (붉은색)</figcaption></figure>
+      <figure class="fig" style="margin:0;background:#0B0F2A"><img src="images/corona.webp" alt="코로나" style="max-height:220px;margin:auto"><figcaption style="color:#DDE2FF">코로나 (백색)</figcaption></figure>
+    </div>
+    <p>태양의 대기에서는 홍염이나 플레어가 나타나기도 한다. <span class="bl">홍염</span>은 광구나 채층의 물질이 불꽃처럼 코로나까지 뻗어 나가는 현상으로, 고리 모양으로 나타나기도 한다. <span class="bl">플레어</span>는 흑점 부근에서 일어나는 강력한 <span class="bl">폭발</span> 현상이다. 플레어가 발생하면 많은 물질과 에너지가 우주 공간으로 방출된다.</p>
+    <div class="grid2">
+      <figure class="fig" style="margin:0;background:#0B0F2A"><img src="images/prominence.webp" alt="홍염" style="max-height:220px;margin:auto"><figcaption style="color:#DDE2FF">홍염</figcaption></figure>
+      <figure class="fig" style="margin:0;background:#0B0F2A"><img src="images/flare.webp" alt="플레어" style="max-height:220px;margin:auto"><figcaption style="color:#DDE2FF">플레어</figcaption></figure>
+    </div>
+    <div class="rv-bar"><button class="btn rv-btn">정답 확인</button></div>
+  </div>
+</section>
+
+<!-- ================= 태양 활동 ================= -->
+<section id="active">
+  <div class="sec-head"><div class="num">4</div><h2>태양풍과 태양의 활동<small>교과서 238쪽</small></h2></div>
+
+  <div class="card concept reveal" data-reveal>
+    <h3>태양풍</h3>
+    <div class="def">태양에서 우주 공간으로 방출되는 입자의 흐름을 <span class="bl">태양풍</span>이라고 한다.</div>
+    <p style="margin-bottom:6px"><b>태양의 활동이 활발한 시기에 태양에 나타나는 현상</b></p>
+    <ul class="qlist">
+      <li><span class="bl">흑점</span>의 수가 많아진다.</li>
+      <li><span class="bl">홍염</span>과 <span class="bl">플레어</span>가 자주 발생한다.</li>
+      <li><span class="bl">코로나</span>의 크기가 커진다.</li>
+      <li><span class="bl">태양풍</span>이 더욱 강해진다.</li>
+    </ul>
+    <div class="rv-bar"><button class="btn rv-btn">정답 확인</button></div>
+  </div>
+
+  <div class="sim reveal">
+    <h3 class="jua" style="font-size:25px;margin:0 0 10px">태양 활동을 바꿔 보자</h3>
+    <canvas id="act" aria-label="태양 활동 정도에 따라 흑점, 코로나, 태양풍, 오로라가 변하는 시뮬레이션"></canvas>
+    <div class="sim-ctrl">
+      <label style="display:block"><span class="note">막대를 오른쪽으로 옮길수록 태양의 활동이 활발해진다.</span>
+        <input type="range" id="lv" min="0" max="100" value="15" aria-label="태양 활동 정도"></label>
+      <div class="lvl" id="lvText">조용함</div>
+    </div>
+    <div class="meters">
+      <div class="meter"><div class="k">흑점 수</div><div class="v" id="mSpot">적음</div></div>
+      <div class="meter p"><div class="k">코로나 크기</div><div class="v" id="mCor">작음</div></div>
+      <div class="meter c"><div class="k">태양풍</div><div class="v" id="mWind">약함</div></div>
+    </div>
+    <p class="note" style="margin:10px 0 0">그림에서 태양과 지구의 크기와 거리는 실제 비율과 다르다. 활동이 활발해지면 아래 지구에 미치는 영향 카드에 불이 켜진다.</p>
+    <div class="effects">
+      <div class="fx" data-t="35"><img src="images/fx_aurora.webp" alt="">오로라 증가</div>
+      <div class="fx" data-t="50"><img src="images/fx_comm.webp" alt="">무선 통신 오류</div>
+      <div class="fx" data-t="60"><img src="images/fx_satellite.webp" alt="">인공위성 고장</div>
+      <div class="fx" data-t="70"><img src="images/fx_plane.webp" alt="">북극 항로 비행 어려움</div>
+      <div class="fx" data-t="78"><img src="images/fx_astronaut.webp" alt="">우주인 방사선 노출</div>
+      <div class="fx" data-t="85"><img src="images/fx_power.webp" alt="">송전 시설 고장·정전</div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 지구에 미치는 영향 ================= -->
+<section id="earth">
+  <div class="sec-head"><div class="num">5</div><h2>태양의 활동이 지구에 미치는 영향<small>교과서 238~239쪽</small></h2></div>
+
+  <div class="card lab reveal" data-reveal>
+    <h3><span class="tag mint">해 보기</span><span class="tag">디지털</span>태양의 활동이 지구에 미치는 영향 추론하기</h3>
+    <div class="grid2 wide-left" style="align-items:start">
+      <div>
+        <p><b>준비물</b> | 스마트 기기, 참고 도서</p>
+        <ol class="steps">
+          <li>태양의 활동으로 지구에 나타나는 현상에 대한 자료를 수집해 보자.</li>
+          <li>수집한 자료를 분석하고 정리하여 태양의 활동으로 지구에 나타나는 현상들을 친구들에게 공유해 보자.</li>
+        </ol>
+      </div>
+      <img src="images/group_talk2.webp" alt="자료를 공유하는 학생들">
+    </div>
+    <div class="grid2" style="margin-top:10px;align-items:start">
+      <div class="side"><b>기사 자료</b> “태양 흑점 폭발 때문에 비행기 연착”<br>태양 흑점 부근에서 일어난 강력한 폭발로 통신 오류가 예상되자, 북극 지방을 거쳐 국내로 들어오는 항공기들이 북극 지방을 우회하여 운항함으로써 비행 시간이 평균 1시간 20분씩 길어졌다. <span class="note">(출처: 조선비즈, 2012.)</span></div>
+      <div class="side" style="padding:8px"><img src="images/aurora.webp" alt="오로라" style="border-radius:10px"><p style="margin:6px 4px 0;font-size:16px">태양풍이 공기 입자와 충돌하면서 빛을 내는 오로라가 발생한다.</p></div>
+    </div>
+    <p style="margin:14px 0 0">- 친구들이 공유한 내용을 바탕으로 하여 태양의 활동이 지구에 미치는 영향을 추론해 보자.</p>
+    <div class="ans"><p>인공위성이 고장 날 수 있다. 대규모 정전이 발생할 수 있다. 오로라가 더 넓은 지역에 자주 발생한다. 무선 통신이 끊기거나 통신 오류가 발생할 수 있다.</p></div>
+    <div class="rv-bar"><button class="btn rv-btn">정답 확인</button></div>
+  </div>
+
+  <div class="card concept reveal" data-reveal>
+    <h3>태양의 활동이 활발해질 때 지구에 미치는 영향 <span class="note" style="font-family:'Noto Sans KR'">그림 Ⅶ-5</span></h3>
+    <div class="scroll-x"><table class="tb">
+      <tbody>
+        <tr><td style="width:90px"><img src="images/fx_aurora.webp" alt="" style="height:50px;margin:auto"></td><td style="text-align:left">고위도 지역에서는 <span class="bl">오로라</span>가 더 넓게 자주 발생한다.</td></tr>
+        <tr><td><img src="images/fx_comm.webp" alt="" style="height:56px;margin:auto"></td><td style="text-align:left"><span class="bl" style="min-width:5em">무선 통신</span>이 끊기거나 오류가 발생할 수 있다.</td></tr>
+        <tr><td><img src="images/fx_satellite.webp" alt="" style="height:50px;margin:auto"></td><td style="text-align:left"><span class="bl" style="min-width:5em">인공위성</span>이 고장 날 수 있다.</td></tr>
+        <tr><td><img src="images/fx_power.webp" alt="" style="height:44px;margin:auto"></td><td style="text-align:left">송전 시설이 고장 나 <span class="bl">정전</span>이 발생할 수 있다.</td></tr>
+        <tr><td><img src="images/fx_plane.webp" alt="" style="height:36px;margin:auto"></td><td style="text-align:left"><span class="bl">북극</span> 지방 하늘을 비행하기 어려워지고, 승무원과 승객이 태양 방사선에 노출될 수 있다.</td></tr>
+        <tr><td><img src="images/fx_astronaut.webp" alt="" style="height:52px;margin:auto"></td><td style="text-align:left"><span class="bl">우주인</span>이 더 많은 태양 방사선에 노출될 수 있다.</td></tr>
+      </tbody>
+    </table></div>
+    <div class="side" style="margin-top:10px"><b>태양 방사선</b> 태양에서 방출된 고에너지 입자와 빛. 최근 우리나라도 태양의 활동 때문에 일어나는 피해를 줄이려고 실시간으로 태양의 활동을 관측하고 분석하여 예보하는 시스템을 운영하고 있다.</div>
+    <div class="rv-bar"><button class="btn rv-btn">정답 확인</button></div>
+  </div>
+</section>
+
+<!-- ================= 확인·정리 ================= -->
+<section id="wrap">
+  <div class="sec-head"><div class="num">6</div><h2>확인하고 정리하기<small>교과서 239쪽</small></h2></div>
+
+  <div class="card check reveal" data-reveal>
+    <h3><span class="tag sun">스스로 확인하기</span></h3>
+    <ul class="qlist">
+      <li><span class="qn">1</span>광구 바로 위 붉은색의 얇은 대기층을 코로나라고 한다. ( ○, ✕ ) → <span class="bl">✕</span> <span class="note">광구 바로 위 붉은색의 얇은 대기층은 채층이다.</span></li>
+      <li><span class="qn">2</span>태양에서 방출되는 입자의 흐름을 <span class="bl">태양풍</span>(이)라고 한다.</li>
+      <li><span class="qn">3</span><b style="color:#9A7400">탐구 능력</b> | 흑점 수가 적을 때에 비해 흑점 수가 많을 때에는 코로나의 크기가 어떻게 변하는지 설명해 보자.
+        <div class="ans"><p>흑점 수가 많을 때는 흑점 수가 적을 때에 비하여 코로나의 크기가 커진다.</p></div></li>
+    </ul>
+    <div class="rv-bar"><button class="btn rv-btn">정답 확인</button></div>
+  </div>
+
+  <div class="card check reveal" data-reveal>
+    <h3><span class="tag sun">추가 확인 문제</span>태양의 표면과 대기에서 볼 수 있는 현상을 구분해 보자.</h3>
+    <p class="note" style="margin-top:-6px">보기: ㉠ 홍염 ㉡ 흑점 ㉢ 쌀알 무늬 ㉣ 코로나 ㉤ 플레어</p>
+    <div class="sortbox">
+      <div class="side" style="text-align:center;background:#FFF1D6"><b style="color:#9A5B00;font-size:22px">(1) 태양의 표면</b><br><span class="bl" style="min-width:6em">㉡ 흑점</span> <span class="bl" style="min-width:7em">㉢ 쌀알 무늬</span></div>
+      <div class="side" style="text-align:center;background:#E7EAFF"><b style="color:#2E3A9E;font-size:22px">(2) 태양의 대기</b><br><span class="bl" style="min-width:6em">㉠ 홍염</span> <span class="bl" style="min-width:6em">㉣ 코로나</span> <span class="bl" style="min-width:6em">㉤ 플레어</span></div>
+    </div>
+    <div class="rv-bar"><button class="btn rv-btn">정답 확인</button></div>
+  </div>
+
+  <div class="card check reveal" data-reveal>
+    <h3><span class="tag sun">O / X 확인</span>문장이 옳으면 O, 옳지 않으면 X</h3>
+    <div class="ox"><span class="s">① 흑점은 주변보다 온도가 높아서 어둡게 보인다.</span><span class="bl">X</span></div>
+    <div class="ox"><span class="s">② 쌀알 무늬는 광구 아래에서 일어나는 대류 현상 때문에 생긴다.</span><span class="bl">O</span></div>
+    <div class="ox"><span class="s">③ 채층과 코로나는 평소에 맨눈으로 쉽게 볼 수 있다.</span><span class="bl">X</span></div>
+    <div class="ox"><span class="s">④ 플레어는 흑점 부근에서 일어나는 강력한 폭발 현상이다.</span><span class="bl">O</span></div>
+    <div class="ox"><span class="s">⑤ 태양의 활동이 활발해지면 오로라가 더 넓은 지역에서 자주 발생한다.</span><span class="bl">O</span></div>
+    <p class="note" style="margin:8px 0 0">① 흑점은 주변보다 온도가 낮다. ③ 태양의 대기는 달이 광구를 완전히 가릴 때 관찰할 수 있다.</p>
+    <div class="rv-bar"><button class="btn rv-btn">정답 확인</button></div>
+  </div>
+
+  <div class="card concept reveal" data-reveal>
+    <h3>배운 내용 정리하기 · 태양</h3>
+    <div class="grid2" style="align-items:stretch">
+      <div class="side" style="background:#FFF1D6"><b style="color:#9A5B00">표면 (광구)</b><br><span class="bl" style="min-width:5em">쌀알 무늬</span> : 대류 때문에 생긴 무늬<br><span class="bl">흑점</span> : 온도가 낮아 어둡게 보이는 무늬</div>
+      <div class="side" style="background:#E7EAFF"><b>대기</b><br><span class="bl">채층</span> : 광구 바로 위 붉은색 얇은 층<br><span class="bl">코로나</span> : 채층 위 백색의 대기층<br><span class="bl">홍염</span>, <span class="bl">플레어</span></div>
+    </div>
+    <div class="side" style="margin-top:12px"><b>태양 활동이 활발할 때</b> 흑점 수 ↑, 홍염·플레어 자주 발생, 코로나 크기 ↑, <span class="bl">태양풍</span> 강해짐 → 오로라, 통신 오류, 인공위성 고장, 정전 등</div>
+    <div class="rv-bar"><button class="btn rv-btn">정답 확인</button></div>
+  </div>
+
+  <div class="card reveal" style="background:var(--gas-soft);border-color:#C3C9F5">
+    <h3 style="margin:0">다음 시간에는</h3>
+    <p style="margin:6px 0 0">‘1. 태양계 구성 천체와 태양의 활동’ 중단원을 정리해 보자. (교과서 240~241쪽)</p>
+  </div>
+</section>
+
+</main>
+<footer>미래엔 중학교 과학 1 · Ⅶ. 태양계 · 1. 태양계 구성 천체와 태양의 활동 · 3. 태양의 활동 (236~239쪽)</footer>
+
+<script>
+
+/* ---------- 정답 확인: 버튼 한 번에 빈칸 하나씩 ---------- */
+document.querySelectorAll('[data-reveal]').forEach(box=>{
+  const items=[...box.querySelectorAll('.bl, .ans, .mk')];
+  const btn=box.querySelector('.rv-btn');
+  if(!btn||!items.length) return;
+  const shown=()=>items.filter(x=>x.classList.contains('on')).length;
+  const upd=()=>{
+    const n=shown();
+    if(n<items.length){btn.innerHTML='정답 확인<span class="cnt">'+n+' / '+items.length+'</span>';btn.classList.remove('ghost');}
+    else{btn.textContent='다시 가리기';btn.classList.add('ghost');}
+  };
+  btn.addEventListener('click',()=>{
+    const next=items.find(x=>!x.classList.contains('on'));
+    if(next)next.classList.add('on');
+    else items.forEach(x=>x.classList.remove('on'));
+    upd();
+  });
+  items.forEach(el=>el.addEventListener('click',()=>{el.classList.add('on');upd();}));
+  upd();
+});
+
+
+/* ---------- 스크롤 페이드 & 내비 강조 ---------- */
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}}),{threshold:.08});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+const links=[...document.querySelectorAll('nav a')];
+const secIo=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){links.forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+e.target.id));}}),{rootMargin:'-45% 0px -50% 0px'});
+document.querySelectorAll('main section').forEach(s=>secIo.observe(s));
+
+/* ---------- 태양 탐험 ---------- */
+(function(){
+  const D={
+    gwang:{n:'광구',w:'s',img:'sunspots.webp',t:'우리 눈에 보이는 태양의 둥근 표면이다. 광구에서는 쌀알 무늬와 흑점을 볼 수 있다.'},
+    ssal:{n:'쌀알 무늬',w:'s',img:'granulation.webp',t:'광구에 쌀알을 뿌려 놓은 것처럼 보이는 무늬이다. 광구 아래에서 일어나는 대류 현상 때문에 생긴다.'},
+    spot:{n:'흑점',w:'s',img:'sunspots.webp',t:'광구에 나타나는 어두운 무늬이다. 주변보다 온도가 낮아 어둡게 보인다. 흑점의 수는 약 11년을 주기로 변한다.'},
+    chae:{n:'채층',w:'a',img:'chromosphere.webp',t:'광구 바로 위 붉은색의 얇은 대기층이다. 달이 광구를 완전히 가릴 때 관찰할 수 있다.'},
+    cor:{n:'코로나',w:'a',img:'corona.webp',t:'채층 위로 멀리 뻗어 있는 백색의 대기층이다. 달이 광구를 완전히 가릴 때 관찰할 수 있다.'},
+    hong:{n:'홍염',w:'a',img:'prominence.webp',t:'광구나 채층의 물질이 불꽃처럼 코로나까지 뻗어 나가는 현상이다. 고리 모양으로 나타나기도 한다.'},
+    flare:{n:'플레어',w:'a',img:'flare.webp',t:'흑점 부근에서 일어나는 강력한 폭발 현상이다. 많은 물질과 에너지가 우주 공간으로 방출된다.'}
+  };
+  const svg=document.getElementById('sunsvg'),panel=document.getElementById('panel'),chips=document.getElementById('chipsel');
+  svg.innerHTML=`
+  <defs>
+    <radialGradient id="corG" cx="50%" cy="50%" r="50%"><stop offset="55%" stop-color="#fff" stop-opacity=".55"/><stop offset="100%" stop-color="#fff" stop-opacity="0"/></radialGradient>
+    <radialGradient id="sunG" cx="45%" cy="40%" r="60%"><stop offset="0%" stop-color="#FFD36A"/><stop offset="70%" stop-color="#FF9B2E"/><stop offset="100%" stop-color="#E8601C"/></radialGradient>
+    <pattern id="gran" width="16" height="16" patternUnits="userSpaceOnUse"><circle cx="8" cy="8" r="6.2" fill="#FFB648" opacity=".5"/></pattern>
+    <clipPath id="sunClip"><circle cx="250" cy="250" r="150"/></clipPath>
+  </defs>
+  <g class="hot" data-k="cor"><circle cx="250" cy="250" r="225" fill="url(#corG)"/><text class="lab" x="40" y="50">코로나</text></g>
+  <g class="hot" data-k="chae"><circle cx="250" cy="250" r="158" fill="none" stroke="#FF3B3B" stroke-width="12" opacity=".85"/><text class="lab" x="400" y="400">채층</text></g>
+  <g class="hot" data-k="gwang"><circle cx="250" cy="250" r="150" fill="url(#sunG)"/><text class="lab" x="195" y="215">광구</text></g>
+  <g class="hot" data-k="ssal"><circle cx="300" cy="320" r="55" fill="url(#gran)" clip-path="url(#sunClip)"/><circle cx="300" cy="320" r="55" fill="none" stroke="#fff" stroke-dasharray="5 5" stroke-width="2"/><text class="lab" x="270" y="395">쌀알 무늬</text></g>
+  <g class="hot" data-k="spot"><ellipse cx="190" cy="290" rx="16" ry="11" fill="#3B1A06"/><ellipse cx="215" cy="300" rx="9" ry="7" fill="#3B1A06"/><ellipse cx="170" cy="305" rx="6" ry="5" fill="#3B1A06"/><text class="lab" x="140" y="345">흑점</text></g>
+  <g class="hot" data-k="hong"><path d="M360 135 C 400 60, 470 70, 455 140 C 450 165, 420 160, 395 150" fill="none" stroke="transparent" stroke-width="36"/><path d="M360 135 C 400 60, 470 70, 455 140 C 450 165, 420 160, 395 150" fill="none" stroke="#FF5A3C" stroke-width="12" stroke-linecap="round" opacity=".9"/><text class="lab" x="420" y="60">홍염</text></g>
+  <g class="hot" data-k="flare"><circle cx="205" cy="275" r="26" fill="#FFF7C2" opacity=".9"><animate attributeName="r" values="18;30;18" dur="1.6s" repeatCount="indefinite"/><animate attributeName="opacity" values=".5;1;.5" dur="1.6s" repeatCount="indefinite"/></circle><text class="lab" x="70" y="250">플레어</text></g>`;
+  // 흑점이 플레어 위로 보이게 순서 조정
+  svg.appendChild(svg.querySelector('[data-k="spot"]'));
+  function show(k){
+    const d=D[k];
+    panel.innerHTML=`<span class="where ${d.w}">${d.w==='s'?'태양의 표면':'태양의 대기'}</span><h4>${d.n}</h4><img src="images/${d.img}" alt="${d.n}"><p style="margin:0;font-size:19px">${d.t}</p>`;
+    svg.querySelectorAll('.hot').forEach(g=>g.classList.toggle('on',g.dataset.k===k));
+    chips.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.k===k));
+  }
+  Object.keys(D).forEach(k=>{const b=document.createElement('button');b.textContent=D[k].n;b.dataset.k=k;b.onclick=()=>show(k);chips.appendChild(b);});
+  svg.querySelectorAll('.hot').forEach(g=>g.addEventListener('click',e=>{e.stopPropagation();show(g.dataset.k);}));
+  show('gwang');
+})();
+
+/* ---------- 태양 활동 시뮬레이션 ---------- */
+(function(){
+  const c=document.getElementById('act'),ctx=c.getContext('2d'),lv=document.getElementById('lv');
+  const lvText=document.getElementById('lvText'),mSpot=document.getElementById('mSpot'),mCor=document.getElementById('mCor'),mWind=document.getElementById('mWind');
+  let W,H;function size(){const r=c.getBoundingClientRect(),d=devicePixelRatio||1;W=r.width;H=r.height;c.width=W*d;c.height=H*d;ctx.setTransform(d,0,0,d,0,0);}
+  size();addEventListener('resize',size);
+  const spots=[];for(let i=0;i<14;i++){const a=Math.random()*6.283,r=Math.sqrt(Math.random())*.75;spots.push({a,r,s:3+Math.random()*6,th:i/14});}
+  let parts=[],flares=[],L=+lv.value,last=performance.now();
+  const stars=[...Array(70)].map(()=>[Math.random(),Math.random(),Math.random()*1.3+.3]);
+  lv.addEventListener('input',()=>{L=+lv.value;upd();});
+  function word(v,a){return v<.34?a[0]:v<.67?a[1]:a[2];}
+  function upd(){const v=L/100;lvText.textContent=word(v,['조용함','보통','활발함']);mSpot.textContent=word(v,['적음','보통','많음']);mCor.textContent=word(v,['작음','보통','큼']);mWind.textContent=word(v,['약함','보통','강함']);
+    document.querySelectorAll('.fx').forEach(f=>f.classList.toggle('on',L>=+f.dataset.t));}
+  upd();
+  function step(now){
+    const dt=Math.min(.033,(now-last)/1000);last=now;const v=L/100;
+    ctx.clearRect(0,0,W,H);
+    stars.forEach(([x,y,s])=>{ctx.fillStyle='rgba(255,255,255,.6)';ctx.fillRect(x*W,y*H,s,s);});
+    const sr=Math.min(H*.36,W*.16),sx=sr+30,sy=H/2;
+    const er=Math.max(16,sr*.22),ex=W-er-70,ey=H/2;
+    // 코로나
+    const cr=sr*(1.25+.55*v);
+    const g=ctx.createRadialGradient(sx,sy,sr*.9,sx,sy,cr);g.addColorStop(0,'rgba(255,255,255,.55)');g.addColorStop(1,'rgba(255,255,255,0)');
+    ctx.fillStyle=g;ctx.beginPath();ctx.arc(sx,sy,cr,0,6.283);ctx.fill();
+    // 태양
+    const sg=ctx.createRadialGradient(sx-sr*.2,sy-sr*.2,sr*.1,sx,sy,sr);sg.addColorStop(0,'#FFD36A');sg.addColorStop(.75,'#FF9B2E');sg.addColorStop(1,'#E8601C');
+    ctx.fillStyle=sg;ctx.beginPath();ctx.arc(sx,sy,sr,0,6.283);ctx.fill();
+    ctx.strokeStyle='rgba(255,60,60,.8)';ctx.lineWidth=4;ctx.beginPath();ctx.arc(sx,sy,sr+3,0,6.283);ctx.stroke();
+    // 흑점
+    spots.forEach(s=>{if(s.th<v*1.0+.05){ctx.fillStyle='#3B1A06';ctx.beginPath();ctx.ellipse(sx+Math.cos(s.a)*s.r*sr,sy+Math.sin(s.a)*s.r*sr,s.s*sr/110,s.s*.7*sr/110,0,0,6.283);ctx.fill();}});
+    // 플레어
+    if(Math.random()<dt*(v*v*3)){const sp=spots[Math.floor(Math.random()*Math.max(1,Math.ceil(v*14)))];flares.push({x:sx+Math.cos(sp.a)*sp.r*sr,y:sy+Math.sin(sp.a)*sp.r*sr,a:1});}
+    flares=flares.filter(f=>(f.a-=dt*1.5)>0);
+    flares.forEach(f=>{ctx.fillStyle=`rgba(255,250,200,${f.a})`;ctx.beginPath();ctx.arc(f.x,f.y,6+18*(1-f.a),0,6.283);ctx.fill();});
+    // 홍염
+    if(v>.3){ctx.strokeStyle=`rgba(255,90,60,${Math.min(1,(v-.3)*2)})`;ctx.lineWidth=6;ctx.lineCap='round';ctx.beginPath();const a0=-.9;ctx.moveTo(sx+Math.cos(a0)*sr,sy+Math.sin(a0)*sr);ctx.bezierCurveTo(sx+Math.cos(a0)*sr*1.5,sy+Math.sin(a0)*sr*1.6,sx+Math.cos(a0+.5)*sr*1.6,sy+Math.sin(a0+.5)*sr*1.5,sx+Math.cos(a0+.45)*sr,sy+Math.sin(a0+.45)*sr);ctx.stroke();}
+    // 태양풍 입자
+    const rate=8+v*110;
+    for(let i=0;i<rate*dt;i++){const a=(Math.random()-.5)*1.1;parts.push({x:sx+Math.cos(a)*sr,y:sy+Math.sin(a)*sr,vx:(120+v*160)*(.8+Math.random()*.4),vy:(Math.random()-.5)*40});}
+    parts=parts.filter(p=>{p.x+=p.vx*dt;p.y+=p.vy*dt;
+      const dx=p.x-ex,dy=p.y-ey,d=Math.hypot(dx,dy);
+      if(d<er*2.4&&dx<0){p.vy+=(dy>0?1:-1)*900*dt;p.vx*=.97;} // 자기장에 휘어짐
+      return p.x<W+10&&p.y>-10&&p.y<H+10&&d>er;});
+    ctx.fillStyle='#FFE58A';parts.forEach(p=>{ctx.globalAlpha=.85;ctx.fillRect(p.x,p.y,2.4,2.4);});ctx.globalAlpha=1;
+    // 지구 + 자기장 선
+    ctx.strokeStyle='rgba(120,180,255,.35)';ctx.lineWidth=1.5;
+    for(let k=1;k<=3;k++){ctx.beginPath();ctx.ellipse(ex,ey,er*(1+k*.55),er*(1+k*.35),0,0,6.283);ctx.stroke();}
+    const eg=ctx.createRadialGradient(ex-er*.3,ey-er*.3,er*.2,ex,ey,er);eg.addColorStop(0,'#7CC4F0');eg.addColorStop(1,'#1E5FA8');
+    ctx.fillStyle=eg;ctx.beginPath();ctx.arc(ex,ey,er,0,6.283);ctx.fill();
+    // 오로라
+    if(v>.3){const a=Math.min(1,(v-.3)*1.6);const wob=Math.sin(now/300)*.15;
+      [-1,1].forEach(s=>{ctx.strokeStyle=`rgba(80,255,170,${a})`;ctx.lineWidth=3+5*v;ctx.beginPath();ctx.arc(ex,ey+s*er*.05,er*(1.05+wob*.1),s<0?Math.PI*1.2:Math.PI*.2,s<0?Math.PI*1.8:Math.PI*.8);ctx.stroke();});}
+    ctx.fillStyle='#DDE2FF';ctx.font='16px Jua, sans-serif';ctx.textAlign='center';ctx.fillText('태양',sx,sy+sr+cr*0+28>H?H-8:sy+sr+26);ctx.fillText('지구',ex,ey+er+24);
+    requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+})();
+</script>
+</body>
+</html>
